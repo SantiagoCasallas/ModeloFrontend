@@ -1,9 +1,12 @@
+// Sidebar.js
+import React from "react";
+
 function Sidebar({ setSelectedFolder }) {
-    const folders = ["Inbox", "Sent", "Drafts", "Trash"];
+    const folders = ["Recibidos", "Enviados", "Borradores", "Basura", "Otros"];
     
     return (
         <div className="w-1/4 bg-gray-200 p-4">
-            <h2 className="text-lg font-bold">Folders</h2>
+            <h2 className="text-lg font-bold">Carpetas</h2>
             <ul>
                 {folders.map((folder) => (
                     <li key={folder} 
