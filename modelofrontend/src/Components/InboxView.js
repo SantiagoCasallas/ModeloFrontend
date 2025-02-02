@@ -1,11 +1,14 @@
 // InboxView.js
-import React from "react";
+import React, { useState } from 'react';
 import EmailItem from "./EmailItem";
 
 function InboxView({ selectedFolder, setSelectedEmail }) {
-    const emails = {
-        Recibidos: [
-            { id: 1, subject: "¡Bienvenido!", sender: "admin@example.com", co:"",date:"10/12/02",body: "¡Bienvenido a nuestro servicio!" },
+    const storedCarpetas = localStorage.getItem("carpetas");
+    console.log(storedCarpetas);
+
+ const emails = {
+     Recibidos: [
+         { id: 1, subject: "¡Bienvenido!", sender: "admin@example.com", co:"",date:"10/12/02",body: "¡Bienvenido a nuestro servicio!" },
             { id: 2, subject: "Recordatorio de reunión", sender: "jefe@example.com", co:"", date:"10/12/02", body: "No olvides nuestra reunión a las 3 PM." },
         ],
         Enviados: [
@@ -18,6 +21,9 @@ function InboxView({ selectedFolder, setSelectedEmail }) {
         Otros:[{id: 5, subject:"una cosa", sender:"yotas@unacosa", date:"10/12/02", body: "mirame"}],
 
     };
+
+
+
 
     const currentEmails = emails[selectedFolder] || [];
 

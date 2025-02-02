@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Importa useNavigate
+import Imagen from '../imagenes/contacto.jpg';
 
 function Navbar() {
   const [dateTime, setDateTime] = useState(new Date());
-  const [showNewMail, setShowNewMail] = useState(false); // Estado para controlar la visibilidad del nuevo correo
+  const [showNewMail, setShowNewMail] = useState(false);
+  const storedNombre = localStorage.getItem("nombreUsuario");
+  const navigate = useNavigate(); // Obtén la función de navegación
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -11,14 +15,17 @@ function Navbar() {
     return () => clearInterval(interval);
   }, []);
 
-  // Función para abrir la interfaz de nuevo correo
   const handleNewMailClick = () => {
     setShowNewMail(true);
   };
 
-  // Función para cerrar la interfaz de nuevo correo
   const handleCloseNewMail = () => {
     setShowNewMail(false);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("nombreUsuario"); // Elimina el nombre de usuario del localStorage
+    navigate("/Login"); // Redirige a la ruta /Login
   };
 
   return (
@@ -28,7 +35,7 @@ function Navbar() {
           <div className="text-lg font-bold">BD.edu.co</div>
           <div className="flex items-center gap-4">
             <button
-              className="bg-blue-500 px-4 py-2 rounded text-white"
+              className="bg-blue-500 px-4 py-2 rounded-xl text-white"
               onClick={handleNewMailClick}
             >
               Nuevo Correo
@@ -36,8 +43,14 @@ function Navbar() {
           </div>
         </div>
         <div>
-          <span className="font-semibold mr-5">User</span>
+          <span className="font-semibold mr-5">{storedNombre}</span>
           <span>{dateTime.toLocaleString()}</span>
+          <button
+            className="bg-blue-500 px-4 py-2 rounded-xl text-white mx-4"
+            onClick={handleLogout} // Llama a la función handleLogout
+          >
+            Salir
+          </button>
         </div>
       </div>
 
@@ -60,11 +73,12 @@ function Navbar() {
                   className="w-full p-2 border rounded"
                   placeholder="Escribe el destinatario"
                 />
+                <button className="border border-4 rounded-xl">
+                  <img src={Imagen} alt="Contacto" />
+                </button>
               </div>
               <div className="mb-4 flex">
-                <label className="w-12 block mb- mx-2" htmlFor="to">
-                  
-                </label>
+                <label className="w-12 block mb- mx-2" htmlFor="to"></label>
                 <label className="border-2 border-black text-center w-16 block mb-2" htmlFor="to">
                   CCO
                 </label>
@@ -76,8 +90,6 @@ function Navbar() {
                 />
               </div>
               <div className="mb-4">
-                <label className="block mb-2" htmlFor="subject">
-                </label>
                 <input
                   type="text"
                   id="subject"
@@ -86,8 +98,6 @@ function Navbar() {
                 />
               </div>
               <div className="mb-4">
-                <label className="block mb-2" htmlFor="body">
-                </label>
                 <textarea
                   id="body"
                   className="w-full p-2 border rounded"
@@ -95,16 +105,14 @@ function Navbar() {
                   placeholder="Escribe tu mensaje"
                 />
                 <div>
-                    <label>
-                        Lista de archivos
-                    </label>
+                  <label>Lista de archivos</label>
                 </div>
               </div>
               <div className="flex justify-between">
                 <button
                   type="button"
                   className="bg-gray-500 px-4 py-2 rounded text-white"
-                  onClick={handleCloseNewMail} // Cerrar el formulario
+                  onClick={handleCloseNewMail}
                 >
                   Cancelar
                 </button>

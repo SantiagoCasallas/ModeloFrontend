@@ -2,6 +2,8 @@
 import React from "react";
 
 function EmailItem({ email, setSelectedEmail }) {
+    const storedNombre = localStorage.getItem("nombreUsuario");
+
     return (
         <div className="flex">
         <div className="w-56 border border-5 border-red-300 p-2 cursor-pointer hover:bg-gray-100" onClick={() => setSelectedEmail(email)}>
