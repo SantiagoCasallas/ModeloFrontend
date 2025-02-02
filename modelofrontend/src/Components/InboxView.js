@@ -5,11 +5,11 @@ import EmailItem from "./EmailItem";
 function InboxView({ selectedFolder, setSelectedEmail }) {
     const emails = {
         Recibidos: [
-            { id: 1, subject: "¡Bienvenido!", sender: "admin@example.com", date:"10/12/02",body: "¡Bienvenido a nuestro servicio!" },
-            { id: 2, subject: "Recordatorio de reunión", sender: "jefe@example.com", date:"10/12/02", body: "No olvides nuestra reunión a las 3 PM." },
+            { id: 1, subject: "¡Bienvenido!", sender: "admin@example.com", co:"",date:"10/12/02",body: "¡Bienvenido a nuestro servicio!" },
+            { id: 2, subject: "Recordatorio de reunión", sender: "jefe@example.com", co:"", date:"10/12/02", body: "No olvides nuestra reunión a las 3 PM." },
         ],
         Enviados: [
-            { id: 3, subject: "Actualización del proyecto", sender: "yo@example.com", date:"10/12/02", body: "Aquí está la última actualización del proyecto." },
+            { id: 3, subject: "Actualización del proyecto", sender: "yo@example.com", co:"", coo:"", date:"10/12/02", body: "Aquí está la última actualización del proyecto." },
         ],
         Borradores: [
             { id: 4, subject: "Idea sin terminar", sender: "yo@example.com", date:"10/12/02", body: "Todavía estoy trabajando en esta idea..." },
