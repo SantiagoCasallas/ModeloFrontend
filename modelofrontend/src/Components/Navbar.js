@@ -57,29 +57,29 @@ function Navbar() {
       {/* Interfaz de nuevo correo */}
       {showNewMail && (
         <div className="fixed top-0 left-0 w-full h-full bg-gray-700 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded shadow-lg w-96">
+          <div className="p-6 rounded shadow-lg w-96 bg-gray-300">
             <h2 className="text-xl font-semibold mb-4">Nuevo Correo</h2>
             <form>
               <div className="mb-4 flex">
-                <label className="w-12 block mb- mx-2" htmlFor="to">
+                <label className="w-12 block mb-2 mx-2" htmlFor="to">
                   Para
                 </label>
-                <label className="border-2 border-black text-center w-16 block mb-2" htmlFor="to">
+                <label className="border-2 border-black text-center w-16 block mx-2 mb-2" htmlFor="to">
                   CO
                 </label>
                 <input
                   type="email"
                   id="to"
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border rounded "
                   placeholder="Escribe el destinatario"
                 />
-                <button className="border border-4 rounded-xl">
-                  <img src={Imagen} alt="Contacto" />
+                <button className="  w-1/6">
+                  <img src={Imagen} alt="Contacto" className="ml-2"/>
                 </button>
               </div>
               <div className="mb-4 flex">
-                <label className="w-12 block mb- mx-2" htmlFor="to"></label>
-                <label className="border-2 border-black text-center w-16 block mb-2" htmlFor="to">
+                <label className="w-12 block  mx-2  mb-2" htmlFor="to"></label>
+                <label className="border-2 border-black text-center w-16 block mx-2 mb-2" htmlFor="to">
                   CCO
                 </label>
                 <input

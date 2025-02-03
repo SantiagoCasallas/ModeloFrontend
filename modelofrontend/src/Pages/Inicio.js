@@ -5,13 +5,11 @@ import EmailDetail from "../Components/EmailDetail";
 import Navbar from "../Components/Navbar";
 
 function Inicio(usuario) {
-    const [selectedEmail, setSelectedEmail] = useState(null);
-    const [carpetas, setCarpetas] = useState([]);
-    
+  const [selectedFolder, setSelectedFolder] = useState("Recibidos");
+  const [selectedEmail, setSelectedEmail] = useState(null);
+  const [carpetas, setCarpetas] = useState([]);
 
-    const [selectedFolder, setSelectedFolder] = useState("Recibidos");
-  
-    // Función para obtener las carpetas
+  // Función para obtener las carpetas
   const getCarpetas = () => {
     fetch(`http://localhost:8000/carpetas`)
       .then((response) => {
@@ -40,7 +38,12 @@ function Inicio(usuario) {
     <div className="h-screen flex flex-col">
       <Navbar />
       <div className="flex flex-1">
-        <Sidebar setSelectedFolder={setSelectedFolder} />
+        {/* Pasa las carpetas como prop al componente Sidebar */}
+        <Sidebar
+          setSelectedFolder={setSelectedFolder}
+          carpetas={carpetas}
+          setSelectedEmail={setSelectedEmail}
+        />
         {selectedEmail ? (
           <EmailDetail
             email={selectedEmail}
