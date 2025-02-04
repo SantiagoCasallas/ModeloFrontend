@@ -55,17 +55,15 @@ function InboxView({ selectedFolder, setSelectedEmail }) {
   // Definir estructura según la carpeta seleccionada
   const isRecibidos = selectedFolder === "Recibido";
   const columnas = isRecibidos
-    ? ["Remitente", "Destinatarios", "Asunto","Preview", "Fecha"]
+    ? ["Remitente", "Destinatarios", "Asunto", "Preview", "Fecha"]
     : ["Destinatarios", "COO", "Asunto", "Preview", "Fecha"];
 
   return (
     <div className="w-3/4 p-4">
-      <h2 className="text-lg font-bold">{selectedFolder}</h2>
-      <div className="flex">
+      <h2 className="text-lg font-bold mb-2">{selectedFolder}</h2>
+      <div className="grid grid-cols-5 gap-2 bg-gray-200 p-2 rounded-md font-bold">
         {columnas.map((columna, index) => (
-          <p key={index} className="text-lg font-bold mx-5 w-1/7">
-            {columna}
-          </p>
+          <p key={index} className="">{columna}</p>
         ))}
       </div>
       {mensajesAgrupados.length > 0 ? (
@@ -78,7 +76,7 @@ function InboxView({ selectedFolder, setSelectedEmail }) {
           />
         ))
       ) : (
-        <p>No hay correos en esta carpeta.</p>
+        <p className="text-center mt-2">No hay correos en esta carpeta.</p>
       )}
     </div>
   );
