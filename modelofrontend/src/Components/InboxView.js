@@ -1,109 +1,62 @@
-// InboxView.js
 import React, { useState } from "react";
 import EmailItem from "./EmailItem";
 
 function InboxView({ selectedFolder, setSelectedEmail }) {
-  const storedCarpetas = localStorage.getItem("carpetas");
-  console.log(storedCarpetas);
+  const storedMensajes = localStorage.getItem("mensajes");
 
-  const emails = {
-    Recibidos: [
-      {
-        id: 1,
-        subject: "¡Bienvenido!",
-        sender: "admin@example.com",
-        co: "",
-        date: "10/12/02",
-        body: "¡Bienvenido a nuestro servicio!",
-      },
-      {
-        id: 2,
-        subject: "Recordatorio de reunión",
-        sender: "jefe@example.com",
-        co: "",
-        date: "10/12/02",
-        body: "No olvides nuestra reunión a las 3 PM.",
-      },
-    ],
-    Enviado: [
-      {
-        id: 3,
-        subject: "Actualización del proyecto",
-        sender: "yo@example.com",
-        co: "",
-        coo: "",
-        date: "10/12/02",
-        body: "Aquí está la última actualización del proyecto.",
-      },
-    ],
-    Borrador: [
-      {
-        id: 4,
-        subject: "Idea sin terminar",
-        sender: "yo@example.com",
-        date: "10/12/02",
-        body: "Todavía estoy trabajando en esta idea...",
-      },
-    ],
-    Basura: [],
-    Otros: [
-      {
-        id: 5,
-        subject: "una cosa",
-        sender: "yotas@unacosa",
-        date: "10/12/02",
-        body: "mirame",
-      },
-    ],
-  };
+  // Intentar parsear solo si storedMensajes es un JSON válido
+  let mensajes = [];
+  try {
+    mensajes = storedMensajes ? JSON.parse(storedMensajes) : [];
+  } catch (error) {
+    console.error("Error al parsear mensajes:", error);
+    mensajes = []; // En caso de error, asigna un array vacío
+  }
 
-  const getEmailsByFolder = (folderName) => {
-    return emails[folderName] || []; // Devuelve el array de correos o un array vacío si no existe
-    const correos=folderName    
-  };
+  // Verificar si mensajes es realmente un array antes de usar reduce()
+  if (!Array.isArray(mensajes)) {
+    console.error("mensajes no es un array:", mensajes);
+    mensajes = [];
+  }
 
-  const currentEmails = emails[selectedFolder] || [];
-  const emailsToShow = getEmailsByFolder(selectedFolder);
+  // Agrupar por id y combinar destinatarios
+  const mensajesAgrupados = Object.values(
+    mensajes.reduce((acc, mensaje) => {
+      if (!mensaje || !mensaje.id) return acc; // Ignorar mensajes inválidos
+
+      const { id, destinatario, ...rest } = mensaje;
+
+      if (!acc[id]) {
+        acc[id] = { ...rest, id, destinatarios: new Set() };
+      }
+
+      acc[id].destinatarios.add(destinatario);
+      return acc;
+    }, {})
+  ).map((mensaje) => ({
+    ...mensaje,
+    destinatarios: Array.from(mensaje.destinatarios).join(", "),
+  }));
+
+  console.log("Mensajes agrupados:", mensajesAgrupados);
 
   return (
     <div className="w-3/4 p-4">
-      <div>
-        <h2 className="text-lg font-bold">{selectedFolder}</h2>
-        {currentEmails.length > 0 ? (
-          currentEmails.map((email) => (
-            <EmailItem
-              key={email.id}
-              email={email}
-              setSelectedEmail={setSelectedEmail}
-            />
-          ))
-        ) : (
-          <p>No hay correos en esta carpeta.</p>
-        )}
-      </div>
+      <h2 className="text-lg font-bold">{selectedFolder}</h2>
       <div className="flex">
-        {emailsToShow.map((email) => (
-          <div key={email.id} className="email-item flex w-full">
-            <h3>{email.subject}</h3>
-            <p>De: {email.sender}</p>
-            <p>Fecha: {email.date}</p>
-          </div>
-        ))}
+        <p className="text-lg font-bold mx-5 w-1/7">Destinatarios</p>
+        <p className="text-lg font-bold mx-5 w-1/7">COO</p>
+        <p className="text-lg font-bold mx-5 w-1/7">Asunto</p>
+        <p className="text-lg font-bold mx-5 w-3/7">Preview</p>
+        <p className="text-lg font-bold mx-5 w-1/7">Fecha</p>
       </div>
-      <div>
-        <h2 className="text-lg font-bold">{selectedFolder}</h2>
-        {emailsToShow.length > 0 ? (
-          emailsToShow.map((email) => (
-            <EmailItem
-              key={email.id}
-              email={email}
-              setSelectedEmail={setSelectedEmail}
-            />
-          ))
-        ) : (
-          <p>No hay correos en esta carpeta.</p>
-        )}
-      </div>
+      {mensajesAgrupados.length > 0 ? (
+        mensajesAgrupados.map((men) => (
+          <EmailItem key={men.id} email={men} setSelectedEmail={setSelectedEmail} />
+        ))
+      ) : (
+        <p>No hay correos en esta carpeta.</p>
+      )}
     </div>
   );
 }

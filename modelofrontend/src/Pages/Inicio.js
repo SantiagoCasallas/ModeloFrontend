@@ -5,7 +5,7 @@ import EmailDetail from "../Components/EmailDetail";
 import Navbar from "../Components/Navbar";
 
 function Inicio(usuario) {
-  const [selectedFolder, setSelectedFolder] = useState("Recibidos");
+  const [selectedFolder, setSelectedFolder] = useState("Enviado");
   const [selectedEmail, setSelectedEmail] = useState(null);
   const [carpetas, setCarpetas] = useState([]);
   const [categorias, setCategorias] = useState([]);
@@ -48,6 +48,7 @@ function Inicio(usuario) {
         alert("Error al obtener los datos. Por favor, intenta de nuevo.");
       });
   }; 
+  
 
   // Llama a getCarpetas cuando el componente se monta
   useEffect(() => {
