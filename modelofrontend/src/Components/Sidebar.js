@@ -1,9 +1,14 @@
 // Sidebar.js
 import React from "react";
 
-function Sidebar({ setSelectedFolder, carpetas, categorias, setSelectedEmail }) {
-const selectedFolder=setSelectedFolder.nombre;
-const storedNombre=localStorage.getItem("nombreUsuario")
+function Sidebar({
+  setSelectedFolder,
+  carpetas,
+  categorias,
+  setSelectedEmail,
+}) {
+  const selectedFolder = setSelectedFolder.nombre;
+  const storedNombre = localStorage.getItem("nombreUsuario");
   const getMensajes = (nombre) => {
     fetch(`http://localhost:8000/mensajes/${nombre}/${storedNombre}`)
       .then((response) => {
@@ -20,7 +25,16 @@ const storedNombre=localStorage.getItem("nombreUsuario")
         console.error("Error al obtener los datos:", error);
         alert("Error al obtener los datos. Por favor, intenta de nuevo.");
       });
-  }; 
+  };
+
+  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const esperar = async (folder) => {
+    setSelectedFolder(folder.nombre);
+    getMensajes(folder.id);
+    setSelectedEmail(null);
+    await wait(1000);
+  };
 
   return (
     <div className="w-1/4 bg-gray-200 p-4">
@@ -30,10 +44,11 @@ const storedNombre=localStorage.getItem("nombreUsuario")
           <li
             key={folder.id} // Usa la propiedad "nombre" como key
             className="cursor-pointer p-2 hover:bg-gray-300"
-            onClick={() =>{ setSelectedFolder(folder.nombre) ;setSelectedEmail(null);getMensajes(folder.id);}}
+            onClick={() => {
+              esperar(folder);
+            }}
             //={() => } // Usa "nombre" aquí
           >
-
             {folder.nombre} {/* Renderiza la propiedad "nombre" */}
           </li>
         ))}
@@ -44,17 +59,18 @@ const storedNombre=localStorage.getItem("nombreUsuario")
           <li
             key={category.id} // Usa la propiedad "nombre" como key
             className="cursor-pointer p-2 hover:bg-gray-300"
-            onClick={() =>{ setSelectedFolder(category.nombre) ;setSelectedEmail(null);getMensajes(category.id);}}
-            
+            onClick={() => {
+              setSelectedFolder(category.nombre);
+              setSelectedEmail(null);
+              getMensajes(category.id);
+            }}
           >
-
             {category.nombre} {/* Renderiza la propiedad "nombre" */}
           </li>
         ))}
       </ul>
     </div>
   );
-  
 }
 
 export default Sidebar;
