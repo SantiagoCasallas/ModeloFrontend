@@ -54,8 +54,6 @@ function Login() {
           Iniciar sesión
         </button>
 
-        {/* Mostrar los datos del usuario si están disponibles */}
-
       </div>
     </div>
   );

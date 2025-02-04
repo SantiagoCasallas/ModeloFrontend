@@ -8,6 +8,7 @@ function Inicio(usuario) {
   const [selectedFolder, setSelectedFolder] = useState("Recibidos");
   const [selectedEmail, setSelectedEmail] = useState(null);
   const [carpetas, setCarpetas] = useState([]);
+  const [categorias, setCategorias] = useState([]);
 
   // Función para obtener las carpetas
   const getCarpetas = () => {
@@ -29,9 +30,29 @@ function Inicio(usuario) {
       });
   };
 
+  const getCategorias = () => {
+    fetch(`http://localhost:8000/categorias`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error en la solicitud");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setCategorias(data); // Actualiza el estado con las carpetas obtenidas
+        localStorage.setItem("categorias", JSON.stringify(data)); // Guarda en localStorage
+        console.log("Las categorias guardadas en localStorage:", data);
+      })
+      .catch((error) => {
+        console.error("Error al obtener los datos:", error);
+        alert("Error al obtener los datos. Por favor, intenta de nuevo.");
+      });
+  }; 
+
   // Llama a getCarpetas cuando el componente se monta
   useEffect(() => {
     getCarpetas();
+    getCategorias();
   }, []); // El array vacío [] asegura que el efecto solo se ejecute una vez
 
   return (
@@ -42,6 +63,7 @@ function Inicio(usuario) {
         <Sidebar
           setSelectedFolder={setSelectedFolder}
           carpetas={carpetas}
+          categorias={categorias}
           setSelectedEmail={setSelectedEmail}
         />
         {selectedEmail ? (
