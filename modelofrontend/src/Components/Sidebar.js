@@ -2,6 +2,26 @@
 import React from "react";
 
 function Sidebar({ setSelectedFolder, carpetas, categorias, setSelectedEmail }) {
+const selectedFolder=setSelectedFolder.nombre;
+const storedNombre=localStorage.getItem("nombreUsuario")
+  const getMensajes = (nombre) => {
+    fetch(`http://localhost:8000/mensajes/${nombre}/${storedNombre}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error en la solicitud");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        localStorage.setItem("mensajes", JSON.stringify(data)); // Guarda en localStorage
+        console.log("Las categorias guardadas en localStorage:", data);
+      })
+      .catch((error) => {
+        console.error("Error al obtener los datos:", error);
+        alert("Error al obtener los datos. Por favor, intenta de nuevo.");
+      });
+  }; 
+
   return (
     <div className="w-1/4 bg-gray-200 p-4">
       <h2 className="text-lg font-bold">Carpetas</h2>
@@ -10,8 +30,8 @@ function Sidebar({ setSelectedFolder, carpetas, categorias, setSelectedEmail }) 
           <li
             key={folder.id} // Usa la propiedad "nombre" como key
             className="cursor-pointer p-2 hover:bg-gray-300"
-            onClick={() =>{ setSelectedFolder(folder.nombre) ;setSelectedEmail(null);}}
-            
+            onClick={() =>{ setSelectedFolder(folder.nombre) ;setSelectedEmail(null);getMensajes(folder.nombre);}}
+            //={() => } // Usa "nombre" aquí
           >
 
             {folder.nombre} {/* Renderiza la propiedad "nombre" */}
@@ -24,7 +44,7 @@ function Sidebar({ setSelectedFolder, carpetas, categorias, setSelectedEmail }) 
           <li
             key={category.id} // Usa la propiedad "nombre" como key
             className="cursor-pointer p-2 hover:bg-gray-300"
-            onClick={() =>{ setSelectedFolder(category.nombre) ;setSelectedEmail(null);}}
+            onClick={() =>{ setSelectedFolder(category.nombre) ;setSelectedEmail(null);getMensajes(category.nombre);}}
             
           >
 
@@ -34,6 +54,7 @@ function Sidebar({ setSelectedFolder, carpetas, categorias, setSelectedEmail }) 
       </ul>
     </div>
   );
+  
 }
 
 export default Sidebar;
