@@ -5,23 +5,30 @@ import EmailDetail from "../Components/EmailDetail";
 import Navbar from "../Components/Navbar";
 
 function Inicio(usuario) {
-  const [selectedFolder, setSelectedFolder] = useState("Enviado");
+  // Estado para almacenar la carpeta seleccionada, por defecto "Recibido"
+  const [selectedFolder, setSelectedFolder] = useState("Recibido");
+
+  // Estado para almacenar el correo seleccionado
   const [selectedEmail, setSelectedEmail] = useState(null);
+
+  // Estado para almacenar las carpetas obtenidas del servidor
   const [carpetas, setCarpetas] = useState([]);
+
+  // Estado para almacenar las categorías obtenidas del servidor
   const [categorias, setCategorias] = useState([]);
 
-  // Función para obtener las carpetas
+  // Función para obtener las carpetas desde el backend
   const getCarpetas = () => {
     fetch(`http://localhost:8000/carpetas`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Error en la solicitud");
         }
-        return response.json();
+        return response.json(); // Convierte la respuesta a JSON
       })
       .then((data) => {
-        setCarpetas(data); // Actualiza el estado con las carpetas obtenidas
-        localStorage.setItem("carpetas", JSON.stringify(data)); // Guarda en localStorage
+        setCarpetas(data); // Guarda las carpetas en el estado
+        localStorage.setItem("carpetas", JSON.stringify(data)); // Almacena en localStorage
         console.log("Las carpetas guardadas en localStorage:", data);
       })
       .catch((error) => {
@@ -30,43 +37,48 @@ function Inicio(usuario) {
       });
   };
 
+  // Función para obtener las categorías desde el backend
   const getCategorias = () => {
     fetch(`http://localhost:8000/categorias`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Error en la solicitud");
         }
-        return response.json();
+        return response.json(); // Convierte la respuesta a JSON
       })
       .then((data) => {
-        setCategorias(data); // Actualiza el estado con las carpetas obtenidas
-        localStorage.setItem("categorias", JSON.stringify(data)); // Guarda en localStorage
-        console.log("Las categorias guardadas en localStorage:", data);
+        setCategorias(data); // Guarda las categorías en el estado
+        localStorage.setItem("categorias", JSON.stringify(data)); // Almacena en localStorage
+        console.log("Las categorías guardadas en localStorage:", data);
       })
       .catch((error) => {
         console.error("Error al obtener los datos:", error);
         alert("Error al obtener los datos. Por favor, intenta de nuevo.");
       });
-  }; 
-  
+  };
 
-  // Llama a getCarpetas cuando el componente se monta
+  // useEffect para obtener carpetas y categorías cuando el componente se monta
   useEffect(() => {
     getCarpetas();
     getCategorias();
-  }, []); // El array vacío [] asegura que el efecto solo se ejecute una vez
+  }, []); // Se ejecuta solo una vez al montar el componente
 
   return (
     <div className="h-screen flex flex-col">
+      {/* Barra de navegación */}
       <Navbar />
+      
+      {/* Contenedor principal con Sidebar y vista de correos */}
       <div className="flex flex-1">
-        {/* Pasa las carpetas como prop al componente Sidebar */}
+        {/* Barra lateral que recibe las carpetas y categorías como props */}
         <Sidebar
           setSelectedFolder={setSelectedFolder}
           carpetas={carpetas}
           categorias={categorias}
           setSelectedEmail={setSelectedEmail}
         />
+
+        {/* Muestra el detalle del correo si hay uno seleccionado, de lo contrario, muestra la bandeja */}
         {selectedEmail ? (
           <EmailDetail
             email={selectedEmail}
